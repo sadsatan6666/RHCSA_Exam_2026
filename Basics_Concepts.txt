@@ -1,0 +1,99 @@
+#this is the list of RHCSA exam 200 objective which can be practiced outside of red hat linux 
+#meaning you do not need red hat linux instead you jut need [linux] i am currently using a debian based MX linux to prepare for basics which are like 
+
+You can practice many general Linux system administration concepts on a Debian-based system (like Debian 12, Ubuntu 24.04, or Linux Mint), but you must be careful.
+
+The RHCSA is a "performance-based" exam, meaning you must solve problems the "Red Hat way." Since Debian uses different core subsystems (APT instead of DNF, AppArmor instead of SELinux), practicing solely on Debian **will cause you to fail specific sections** of the exam.
+
+Below is the breakdown of which objectives are **Safe** (Universal Linux) and which are **Unsafe** (Red Hat Specific) to practice on Debian.
+
+### 1. Safe to Practice on Debian (Universal Linux Skills)
+
+*These tasks function nearly identically on Debian (Bash, Systemd, and GNU tools are standard), making them safe to practice.*
+
+* **Understand and use essential tools:**
+* Access a shell prompt and issue commands.
+* Use input-output redirection (`>`, `>>`, `|`).
+* Use `grep` and regular expressions.
+* Access remote systems using SSH.
+* Archive, compress, unpack, and uncompress files (`tar`, `gzip`, `bzip2`).
+* Create and edit text files (`vim`, `nano`).
+* Create, delete, copy, and move files and directories.
+* Create hard and soft links (`ln`).
+* List, set, and change standard ugo/rwx permissions (`chmod`, `chown`).
+* Locate, read, and use system documentation (`man`).
+
+
+* **Create simple shell scripts:**
+* All scripting objectives are safe. Bash scripting is universal.
+* (Conditionals, Loops, Parameters `$1`, Processing output).RHCSA_
+
+
+* **Manage Users and Groups:**
+* Create, delete, and modify local user accounts (`useradd`, `usermod`).
+* Create, delete, and modify local groups (`groupadd`, `groupmod`).
+* Change passwords and adjust aging (`passwd`, `chage`).
+* Configure privileged access (`sudo` configuration in `/etc/sudoers.d/`).
+
+
+* **Configure Local Storage & File Systems:**
+* *Note: You may need to install `lvm2` and `xfsprogs` on Debian first.*
+* List, create, delete partitions on GPT disks (`fdisk`, `gdisk`).
+* Create/remove physical volumes, volume groups, logical volumes (`pvcreate`, `vgcreate`, `lvcreate`).
+* Create, mount, unmount VFAT, ext4, and XFS file systems.
+* Mount file systems by UUID (editing `/etc/fstab`).
+* Diagnose and correct file permission problems.
+
+
+
+### 2. Risky / "install-required" on Debian (Proceed with Caution)
+
+*These work on Debian, but the tools are not installed by default or the configuration file paths differ.*
+
+* **Operate running systems:**
+* *Start, stop, and check status of network services:* Safe, as both use `systemctl`, but service names differ (e.g., `apache2` on Debian vs `httpd` on Red Hat).
+* *Locate and interpret system logs:* Safe (`journalctl` is standard), but log file locations differ (`/var/log/auth.log` on Debian vs `/var/log/secure` on Red Hat).
+* *Configure time service clients:* Debian uses `systemd-timesyncd` by default; Red Hat uses `chronyd`. You would need to explicitly install `chrony` on Debian to practice.
+
+
+* **Manage basic networking:**
+* *Configure IPv4/IPv6:* Debian uses `ifupdown` or `Netplan` by default. Red Hat uses **NetworkManager** (`nmcli`).
+* *Fix:* You *can* install NetworkManager on Debian and use `nmcli`, but it is not the default experience.
+
+
+
+### 3. DO NOT Practice on Debian (Red Hat Specifics)
+
+*The software stack here is fundamentally different. Practicing these on Debian is useless for the exam.*
+
+* **❌ Manage software (The biggest difference):**
+* *Objective:* Install/remove RPM packages, Configure RPM repositories.
+* *Why:* Debian uses `.deb` and `apt`. Red Hat uses `.rpm` and `dnf`/`rpm`. You cannot practice `dnf` repository management on Debian.
+
+
+* **❌ Manage security (SELinux):**
+* *Objective:* Set enforcing/permissive modes, Manage SELinux file contexts/port labels.
+* *Why:* Debian uses **AppArmor** by default. While you *can* install SELinux on Debian, it is complex and behaves differently than the "out-of-the-box" Red Hat policy. You need a Red Hat system to practice troubleshooting SELinux contexts correctly.
+
+
+* **❌ Manage security (Firewall):**
+* *Objective:* Configure firewall settings using `firewall-cmd`.
+* *Why:* Debian often defaults to `ufw` or raw `nftables`. Red Hat uses `firewalld`.
+
+
+* **❌ Interrupt the boot process / Modify bootloader:**
+* *Why:* The procedure to reset a root password involves editing GRUB. The paths (`/boot/grub/grub.cfg` vs `/boot/grub2/grub.cfg`) and the command to rebuild grub (`update-grub` vs `grub2-mkconfig`) are different.
+
+
+
+### 4. Which Debian version matches RHEL 10 software versions?
+RHCSA_
+If you want the closest software version match to **RHEL 10** (which is based on Fedora 40/41 era technology):
+
+* **Use: Debian 13 "Trixie" (currently Debian Testing).**
+* **Why:** RHEL 10 uses Kernel 6.12+, GNOME 47, and Python 3.12.
+* **Debian 12 (Stable)** is too old (Kernel 6.1, Python 3.11).
+* **Debian Testing** is currently on Kernel 6.x and Python 3.12+, which aligns much closer to the RHEL 10 runtime environment for scripting and tool versions.
+
+
+
